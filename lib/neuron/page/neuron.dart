@@ -263,7 +263,7 @@ class NeuronPage extends BasePage<NeuronState, NeuronCubit> {
                         Container(
                             width: MediaQuery.of(context).size.width * 0.2,
                             child: Text(
-                              "[ ${state.weight[0]}, ${state.weight[1]} ]",
+                              "[ ${state.weight[0].toStringAsFixed(3)}, ${state.weight[1].toStringAsFixed(3)} ]",
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                   color: Colors.black, fontSize: 16),
@@ -279,7 +279,7 @@ class NeuronPage extends BasePage<NeuronState, NeuronCubit> {
                         Container(
                             width: MediaQuery.of(context).size.width * 0.2,
                             child: Text(
-                              state.error.toString(),
+                              state.error.toStringAsFixed(3),
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                   color: Colors.black, fontSize: 16),
