@@ -16,7 +16,7 @@ class NeuronPage extends BasePage<NeuronState, NeuronCubit> {
       appBar: AppBar(
         centerTitle: true,
         title: Text("First Neuron", style: TextStyle(color: Colors.blue)),
-          backgroundColor:Colors.white,
+        backgroundColor: Colors.white,
         elevation: 0,
       ),
       body: SafeArea(
@@ -30,59 +30,7 @@ class NeuronPage extends BasePage<NeuronState, NeuronCubit> {
                 children: [
                   Container(
                     color: Colors.blue,
-                    margin: EdgeInsets.only(bottom: 10) ,
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    width: MediaQuery.of(context).size.width,
-                    child: const Text("Weight",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            fontSize: 22)),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Column(
-                        children: [
-                          const Text("w1",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.blue,
-                                  fontSize: 20)),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.4,
-                            child: TextField(
-                              controller: state.controllerw1,
-                              keyboardType: TextInputType.number,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          const Text("w2",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.blue,
-                                  fontSize: 20)),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.4,
-                            child: TextField(
-                              controller: state.controllerw2,
-                              keyboardType: TextInputType.number,
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    color: Colors.blue,
-                    margin: EdgeInsets.symmetric(vertical: 10) ,
+                    margin: EdgeInsets.symmetric(vertical: 10),
                     padding: EdgeInsets.symmetric(vertical: 10),
                     width: MediaQuery.of(context).size.width,
                     child: const Text("Input",
@@ -132,6 +80,46 @@ class NeuronPage extends BasePage<NeuronState, NeuronCubit> {
                   const SizedBox(
                     height: 10,
                   ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Column(
+                        children: [
+                          const Text("x3",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blue,
+                                  fontSize: 20)),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            child: TextField(
+                              controller: state.controllerx3,
+                              keyboardType: TextInputType.number,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          const Text("x4",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blue,
+                                  fontSize: 20)),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            child: TextField(
+                              controller: state.controllerx4,
+                              keyboardType: TextInputType.number,
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
                   TextButton(
                     style: ButtonStyle(
                         padding: MaterialStateProperty.resolveWith((states) {
@@ -160,7 +148,7 @@ class NeuronPage extends BasePage<NeuronState, NeuronCubit> {
                   ),
                   Container(
                     color: Colors.blue,
-                    margin: EdgeInsets.only(bottom: 10) ,
+                    margin: EdgeInsets.only(bottom: 10),
                     padding: EdgeInsets.symmetric(vertical: 10),
                     width: MediaQuery.of(context).size.width,
                     child: Row(
@@ -198,7 +186,7 @@ class NeuronPage extends BasePage<NeuronState, NeuronCubit> {
                         Container(
                             width: MediaQuery.of(context).size.width * 0.2,
                             child: Text(
-                              "[ ${state.controllerx1.text}, ${state.controllerx2.text} ]",
+                              "[ ${state.controllerx1.text}, ${state.controllerx2.text}, ${state.controllerx3.text}, ${state.controllerx4.text} ]",
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                   color: Colors.black, fontSize: 16),
@@ -206,7 +194,7 @@ class NeuronPage extends BasePage<NeuronState, NeuronCubit> {
                         Container(
                             width: MediaQuery.of(context).size.width * 0.2,
                             child: Text(
-                              state.expectedOutput.toString(),
+                              state.expectedOutput[state.index].toString(),
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                   color: Colors.black, fontSize: 16),
@@ -225,7 +213,7 @@ class NeuronPage extends BasePage<NeuronState, NeuronCubit> {
                   SizedBox(height: 20),
                   Container(
                     color: Colors.blue,
-                    margin: EdgeInsets.only(bottom: 10) ,
+                    margin: EdgeInsets.only(bottom: 10),
                     padding: EdgeInsets.symmetric(vertical: 10),
                     width: MediaQuery.of(context).size.width,
                     child: Row(
@@ -263,7 +251,7 @@ class NeuronPage extends BasePage<NeuronState, NeuronCubit> {
                         Container(
                             width: MediaQuery.of(context).size.width * 0.2,
                             child: Text(
-                              "[ ${state.weight[0].toStringAsFixed(3)}, ${state.weight[1].toStringAsFixed(3)} ]",
+                              "[ ${state.weight[0].toStringAsFixed(3)}, ${state.weight[1].toStringAsFixed(3)}, ${state.weight[2].toStringAsFixed(3)}, ${state.weight[3].toStringAsFixed(3)} ]",
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                   color: Colors.black, fontSize: 16),
@@ -287,9 +275,6 @@ class NeuronPage extends BasePage<NeuronState, NeuronCubit> {
                       ],
                     ),
                   ),
-
-
-
                 ],
               ),
             ),

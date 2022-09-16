@@ -9,45 +9,60 @@ class NeuronCubit extends Cubit<NeuronState> {
   NeuronCubit() : super(NeuronState.initial());
 
   initial() {
-    emit(state.copyWith(weight: [0.0, 0.0], controllerInput: [0.0, 0.0]));
+    List<double> weight = [];
+    for (var i = 0; i < 4; i++) {
+      Random random = Random();
+      weight.add(random.nextDouble());
+    }
+    emit(state.copyWith(weight: weight, controllerInput: [0.0, 0.0, 0.0, 0.0]));
   }
 
   calculate(BuildContext context) async {
     FocusScope.of(context).unfocus();
-    emit(state.copyWith(weight: [
-      double.parse(state.controllerw1.text),
-      double.parse(state.controllerw2.text)
-    ], controllerInput: [
+    emit(state.copyWith(controllerInput: [
       double.parse(state.controllerx1.text),
-      double.parse(state.controllerx2.text)
+      double.parse(state.controllerx2.text),
+      double.parse(state.controllerx3.text),
+      double.parse(state.controllerx4.text)
     ]));
-    await calculateExpectedOutput();
-     calculateOutput();
-
-
+    await calculateRealInput();
+    calculateOutput();
   }
-  verifyOutput (){
-    if(state.output != state.expectedOutput){
+
+  verifyOutput() {
+    if (state.output != state.expectedOutput[state.index]) {
       entertainment();
       calculateOutput();
     }
   }
-  calculateExpectedOutput() {
-    if (double.parse(state.controllerx1.text) <= 0.0 ||
-        double.parse(state.controllerx2.text) <= 0.0) {
-      emit(state.copyWith(expectedOutput: 0, interactions: 0));
-    } else {
-      emit(state.copyWith(expectedOutput: 1, interactions: 0));
+
+  calculateRealInput() async{
+    List<int> realInput = [];
+    for (var i = 0; i < state.controllerInput.length; i++) {
+      if (state.controllerInput[i] <= 0.0) {
+        realInput.add(-1);
+      } else {
+        realInput.add(1);
+      }
     }
+    emit(state.copyWith(realInput: realInput, interactions: 0));
+   await findIndexOfCase();
   }
 
-   calculateOutput() {
+  findIndexOfCase() {
+    List<int> realCase = state.theoreticalInput.firstWhere(
+        (element) => element.toString() == state.realInput.toString(),
+        orElse: () => [-1, -1, -1, -1]);
+    emit(state.copyWith(index: state.theoreticalInput.indexOf(realCase)));
+  }
+
+  calculateOutput() {
     double output = 0;
 
-    output = numerics.tanh(
-        (state.weight[0] * double.parse(state.controllerx1.text)) +
-            (state.weight[1] * double.parse(state.controllerx2.text)) -
-            (state.error));
+    for (var i = 0; i < state.controllerInput.length; i++) {
+      output += state.weight[i] * state.controllerInput[i];
+    }
+    output = numerics.tanh(output - (state.error));
     if (output < 1) {
       output = 0;
     } else {
@@ -61,17 +76,29 @@ class NeuronCubit extends Cubit<NeuronState> {
     double firstWeight = (state.weight[0] +
         2 *
             state.learningPercentage *
-            state.expectedOutput *
-            double.parse(state.controllerx1.text));
+            state.expectedOutput[state.index] *
+            state.controllerInput[0]);
+
     double secondWeight = (state.weight[1] +
         2 *
             state.learningPercentage *
-            state.expectedOutput *
-            double.parse(state.controllerx2.text));
+            state.expectedOutput[state.index] *
+            state.controllerInput[1]);
+
+    double thirdWeight = (state.weight[2] +
+        2 *
+            state.learningPercentage *
+            state.expectedOutput[state.index] *
+            state.controllerInput[2]);
+    double fourthWeight = (state.weight[3] +
+        2 *
+            state.learningPercentage *
+            state.expectedOutput[state.index] *
+            state.controllerInput[3]);
     double error = (state.error + 2 * state.learningPercentage * (-1));
 
     emit(state.copyWith(
-        weight: [firstWeight, secondWeight],
+        weight: [firstWeight, secondWeight, thirdWeight, fourthWeight],
         error: error,
         interactions: state.interactions + 1));
   }
