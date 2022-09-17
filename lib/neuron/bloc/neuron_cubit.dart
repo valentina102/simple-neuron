@@ -11,10 +11,10 @@ class NeuronCubit extends Cubit<NeuronState> {
   initial() {
     List<double> weight = [];
     for (var i = 0; i < 4; i++) {
-      Random random = Random();
-      weight.add(random.nextDouble());
+      weight.add(Random().nextDouble());
     }
-    emit(state.copyWith(weight: weight, controllerInput: [0.0, 0.0, 0.0, 0.0]));
+    emit(state.copyWith(weight: weight, controllerInput: [0.0, 0.0, 0.0, 0.0], realInput: [1,1,1,-1]));
+    entertainment();
   }
 
   calculate(BuildContext context) async {
@@ -64,7 +64,7 @@ class NeuronCubit extends Cubit<NeuronState> {
     }
     output = numerics.tanh(output - (state.error));
     if (output < 1) {
-      output = 0;
+      output = -1;
     } else {
       output = 1;
     }
